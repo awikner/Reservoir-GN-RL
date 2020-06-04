@@ -130,3 +130,8 @@ dmypy.json
 
 # Data files
 *.csv
+*.pdf
+*.png
+
+# Presentation Files
+*.key
