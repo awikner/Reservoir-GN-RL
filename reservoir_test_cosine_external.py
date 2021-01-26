@@ -1,10 +1,11 @@
 from reservoir_rls_multires import *
 import matplotlib.pyplot as plt
 from lorenz63 import *
-from scipy.signal import welch, periodogram, detrend
+from scipy.signal import welch, periodogram
 from sklearn.preprocessing import StandardScaler
 import cma
 import os
+
 
 def min_func_wtruth(x, mask, base_data, f_s, true_external_data,\
     base_res, num_tests, num_nodes, pred_length, train_length, scale = True, 
@@ -23,9 +24,15 @@ def min_func_wtruth(x, mask, base_data, f_s, true_external_data,\
 data_length = 1000000
 step = 0.05
 f_s = 1/step
+scale = 0.01
+slow_var = 48/28
 
-external_data = np.loadtxt('/lustre/awikner1/Reservoir-GN-RL/ornstein_uhlenbeck_data.csv', delimiter = ',')
-lorenz_data_ou = np.loadtxt('/lustre/awikner1/Reservoir-GN-RL/lorenz_data_ou_step%0.2f.csv' %(step), delimiter = ',')
+lorenz_data_cosine = np.loadtxt('/lustre/awikner1/Reservoir-GN-RL/lorenz_data_cosine_step%0.2f.csv' %(step), delimiter = ',')
+times = np.arange(lorenz_data_cosine.shape[0])*step
+external_data = r_t(times)
+
+scaled_data = lorenz_data_cosine
+scaled_data = np.ascontiguousarray(scaled_data)
 
 num_nodes = 360
 num_tests = 200
@@ -36,7 +43,7 @@ res_seed = 1
 base_res = reservoir(4,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'forget']
 x0 = np.array([6,4,0,9])
-min_func_base = lambda x: min_func_wtruth(x, mask, np.ascontiguousarray(lorenz_data_ou), f_s, external_data,\
+min_func_base = lambda x: min_func_wtruth(x, mask, scaled_data, f_s, external_data,\
     base_res, num_tests, num_nodes, pred_length, train_length)
 sigma = 2
 
@@ -58,8 +65,7 @@ NOT saved, nor are the exact samples. If these need to be saved, one
 will also have to download from github and make some edits. Again,
 ask me.
 """
-foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_ou_wexternout_scaled_res%d\\' % res_seed
-
+foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_wtruthout_scaled_res%d\\' % res_seed
 if not os.path.exists(foldername):
     os.makedirs(foldername)
 else:
