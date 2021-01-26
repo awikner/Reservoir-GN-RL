@@ -132,6 +132,9 @@ dmypy.json
 *.csv
 *.pdf
 *.png
+*.gif
+*.nwb
 
 # Presentation Files
 *.key
+*.pptx

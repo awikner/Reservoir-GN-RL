@@ -1,0 +1,898 @@
+[
+  {
+    "id": 15,
+    "item": "natural_movie_one_a_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 43,
+    "item": "preferred_direction_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 44,
+    "item": "orientation_selectivity_dg_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 70,
+    "item": "sfdi_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 107,
+    "item": "eye_position_b_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 108,
+    "item": "eye_position_b_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 56,
+    "item": "time_to_peak_sg_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 101,
+    "item": "running_speed_b_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 68,
+    "item": "peak_dff_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 13,
+    "item": "p_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 77,
+    "item": "run_mod_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 54,
+    "item": "orientation_selectivity_sg_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 113,
+    "item": "representational_similarity_sg_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 69,
+    "item": "g_osi_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 110,
+    "item": "eye_position_c_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 38,
+    "item": "natural_movie_two_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_two"
+  },
+  {
+    "id": 65,
+    "item": "tfdi_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 66,
+    "item": "run_mod_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 85,
+    "item": "rf_area_off_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_off"
+  },
+  {
+    "id": 118,
+    "item": "population_receptive_field_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 24,
+    "item": "speed_tuning_b_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 62,
+    "item": "g_osi_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 94,
+    "item": "mean_running_speed_c",
+    "item_type": "M",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 53,
+    "item": "preferred_spatial_frequency_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 128,
+    "item": "receptive_field_off_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise"
+  },
+  {
+    "id": 25,
+    "item": "speed_tuning_c_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 31,
+    "item": "natural_scene_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 75,
+    "item": "image_sel_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 84,
+    "item": "rf_area_on_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_on"
+  },
+  {
+    "id": 60,
+    "item": "static_gratings_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 86,
+    "item": "rf_distance_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise"
+  },
+  {
+    "id": 97,
+    "item": "signal_correlation_b_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 116,
+    "item": "representational_similarity_ns_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 39,
+    "item": "projection_a",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 92,
+    "item": "mean_running_speed_a",
+    "item_type": "M",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 126,
+    "item": "reliability_nm1_c",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 109,
+    "item": "eye_position_c_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 73,
+    "item": "p_run_mod_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 59,
+    "item": "time_to_peak_ns_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 103,
+    "item": "running_speed_c_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 28,
+    "item": "drifting_grating_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 76,
+    "item": "reliability_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 18,
+    "item": "natural_movie_one_b_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 111,
+    "item": "representational_similarity_dg_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 17,
+    "item": "natural_movie_one_b_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 55,
+    "item": "orientation_selectivity_sg_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 106,
+    "item": "eye_position_a_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 82,
+    "item": "rf_center_off_x_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_off"
+  },
+  {
+    "id": 115,
+    "item": "representational_similarity_ns_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 130,
+    "item": "receptive_field_on_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise"
+  },
+  {
+    "id": 11,
+    "item": "pref_sf_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 46,
+    "item": "direction_selectivity_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 41,
+    "item": "projection_c",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 79,
+    "item": "peak_dff_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 100,
+    "item": "running_speed_a_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 9,
+    "item": "osi_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 37,
+    "item": "natural_movie_two_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_two"
+  },
+  {
+    "id": 5,
+    "item": "p_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 27,
+    "item": "drifting_grating_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 63,
+    "item": "g_dsi_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 40,
+    "item": "projection_b",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 102,
+    "item": "running_speed_b_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 120,
+    "item": "correlation_a_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 19,
+    "item": "natural_movie_one_c_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 121,
+    "item": "correlation_b_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 35,
+    "item": "locally_sparse_noise_off_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_off"
+  },
+  {
+    "id": 83,
+    "item": "rf_center_off_y_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_off"
+  },
+  {
+    "id": 96,
+    "item": "signal_correlation_a_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 50,
+    "item": "preferred_orientation_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 57,
+    "item": "time_to_peak_sg_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 12,
+    "item": "pref_phase_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 32,
+    "item": "natural_scene_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 42,
+    "item": "preferred_direction_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 80,
+    "item": "rf_center_on_x_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_on"
+  },
+  {
+    "id": 119,
+    "item": "correlation_a_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 95,
+    "item": "signal_correlation_a_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 1,
+    "item": "osi_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 8,
+    "item": "time_to_peak_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 112,
+    "item": "representational_similarity_dg_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 52,
+    "item": "preferred_spatial_frequency_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 45,
+    "item": "orientation_selectivity_dg_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 29,
+    "item": "natural_movie_three_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_three"
+  },
+  {
+    "id": 21,
+    "item": "speed_tuning_a_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 23,
+    "item": "speed_tuning_b_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 87,
+    "item": "rf_overlap_index_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise"
+  },
+  {
+    "id": 127,
+    "item": "receptive_field_off_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise"
+  },
+  {
+    "id": 114,
+    "item": "representational_similarity_sg_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 129,
+    "item": "receptive_field_on_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise"
+  },
+  {
+    "id": 14,
+    "item": "time_to_peak_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 10,
+    "item": "pref_ori_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 125,
+    "item": "reliability_nm1_b",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 34,
+    "item": "locally_sparse_noise_on_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_on"
+  },
+  {
+    "id": 78,
+    "item": "p_run_mod_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 2,
+    "item": "dsi_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 33,
+    "item": "locally_sparse_noise_on_small",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_on"
+  },
+  {
+    "id": 51,
+    "item": "preferred_orientation_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 91,
+    "item": "reliability_nm3",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_movie_three"
+  },
+  {
+    "id": 117,
+    "item": "population_receptive_field_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 7,
+    "item": "p_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 58,
+    "item": "time_to_peak_ns_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 81,
+    "item": "rf_center_on_y_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_on"
+  },
+  {
+    "id": 88,
+    "item": "rf_chi2_lsn",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise"
+  },
+  {
+    "id": 22,
+    "item": "speed_tuning_a_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 4,
+    "item": "pref_tf_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 72,
+    "item": "run_mod_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 61,
+    "item": "static_gratings_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 36,
+    "item": "locally_sparse_noise_off_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "locally_sparse_noise_off"
+  },
+  {
+    "id": 93,
+    "item": "mean_running_speed_b",
+    "item_type": "M",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 104,
+    "item": "running_speed_c_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 99,
+    "item": "running_speed_a_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 48,
+    "item": "preferred_temporal_frequency_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 105,
+    "item": "eye_position_a_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 6,
+    "item": "pref_image_ns",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_scene"
+  },
+  {
+    "id": 90,
+    "item": "reliability_nm2",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_movie_two"
+  },
+  {
+    "id": 67,
+    "item": "p_run_mod_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 16,
+    "item": "natural_movie_one_a_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 30,
+    "item": "natural_movie_three_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_three"
+  },
+  {
+    "id": 3,
+    "item": "pref_dir_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 47,
+    "item": "direction_selectivity_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 98,
+    "item": "signal_correlation_b_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 20,
+    "item": "natural_movie_one_c_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  },
+  {
+    "id": 71,
+    "item": "reliability_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 74,
+    "item": "peak_dff_sg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "static_grating"
+  },
+  {
+    "id": 122,
+    "item": "correlation_b_small",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 64,
+    "item": "reliability_dg",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 26,
+    "item": "speed_tuning_c_large",
+    "item_type": "T",
+    "level": "R",
+    "stimulus_name": "experiment_summary"
+  },
+  {
+    "id": 49,
+    "item": "preferred_temporal_frequency_large",
+    "item_type": "T",
+    "level": "S",
+    "stimulus_name": "drifting_grating"
+  },
+  {
+    "id": 89,
+    "item": "reliability_nm1_a",
+    "item_type": "M",
+    "level": "R",
+    "stimulus_name": "natural_movie_one"
+  }
+]
