@@ -1,24 +1,10 @@
-#!/homes/awikner1/.python-venvs/reservoir-rls/bin/python -u
-#Assume will be finished in no more than 18 hours
-#SBATCH -t 1:00:00
-#Launch on 10 cores distributed over as many nodes as needed
-#SBATCH --ntasks=10
-#SBATCH -N 1
-#Assume need 6 GB/core (6144 MB/core)
-#SBATCH --mem-per-core=6144
-#SBATCH --mail-user=awikner1@umd.edu
-#SBATCH --mail-type=BEGIN
-#SBATCH --mail-type=END
-
-import os, sys
-sys.path.append('/lustre/awikner1/Reservoir-GN-RL/')
-
 from reservoir_rls_multires import *
 import matplotlib.pyplot as plt
 from lorenz63 import *
 from scipy.signal import welch, periodogram
 from sklearn.preprocessing import StandardScaler
 import cma
+import os
 
 
 def min_func_wtruth(x, mask, base_data, f_s, true_external_data,\
@@ -62,7 +48,7 @@ min_func_base = lambda x: min_func_wtruth(x, mask, scaled_data, f_s, external_da
 sigma = 2
 
 opts = cma.CMAOptions()
-opts.set('popsize',8) # Set number of samples per generation
+opts.set('popsize',10*x0.size) # Set number of samples per generation
 """
 Set bounds on parameters. IMPORTANT: The mean returned by cma-es is
 the mean BEFORE the boundary function is applied, so the mean may not
@@ -79,12 +65,12 @@ NOT saved, nor are the exact samples. If these need to be saved, one
 will also have to download from github and make some edits. Again,
 ask me.
 """
-foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_wtruthout_scaled_res%d' % res_seed
+foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_wtruthout_scaled_test2_res%d' % res_seed
 if not os.path.exists(foldername):
     os.makedirs(foldername)
 else:
     for root, dirs, files in os.walk(foldername):
         for file in files:
             os.remove(os.path.join(root, file))
-opts.set('verb_filenameprefix',foldername + '/')
+opts.set('verb_filenameprefix',foldername + '\\')
 results = cma.fmin(min_func_base, x0, sigma, options = opts) # Run the algorithm

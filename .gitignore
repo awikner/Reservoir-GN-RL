@@ -134,6 +134,7 @@ dmypy.json
 *.png
 *.gif
 *.nwb
+*.out
 
 # Presentation Files
 *.key
