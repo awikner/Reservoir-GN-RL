@@ -248,10 +248,13 @@ class EvalParallel2(object):
     def __init__(self, fitness_function=None, number_of_processes=None):
         self.fitness_function = fitness_function
         self.processes = number_of_processes  # for the record
+        print(number_of_processes)
         if self.processes is None or self.processes > 0:
             self.pool = ProcessingPool(self.processes)
+            print(self.processes)
         else:
             self.pool = None
+            print(self.processes)
 
     def __call__(self, solutions, fitness_function=None, args=(), timeout=None):
         """evaluate a list/sequence of solution-"vectors", return a list
@@ -263,8 +266,10 @@ class EvalParallel2(object):
         Raises `multiprocessing.TimeoutError` if `timeout` is given and
         exceeded.
         """
+        print('Starting call')
         fitness_function = fitness_function or self.fitness_function
         if fitness_function is None:
+            
             raise ValueError("`fitness_function` was never given, must be"
                              " passed in `__init__` or `__call__`")
         if not self.pool:
@@ -285,6 +290,8 @@ class EvalParallel2(object):
 
     def terminate(self):
         """free allocated processing pool"""
+        print('Terminating Pool')
+        print(self.pool)
         if not self.pool:
             return
         # self.pool.close()  # would wait for job termination

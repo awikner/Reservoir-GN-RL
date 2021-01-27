@@ -182,6 +182,7 @@ class OOOptimizer(object):
         True
 
     """
+        print('OOOptimizer')
         if kwargs:
             message = "ignoring unkown argument%s %s in OOOptimizer.optimize" % (
                 's' if len(kwargs) > 1 else '', str(kwargs))
