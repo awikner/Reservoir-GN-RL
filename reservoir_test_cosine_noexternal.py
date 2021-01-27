@@ -1,10 +1,25 @@
+#!/homes/awikner1/.python-venvs/reservoir-rls/bin/python -u
+#Assume will be finished in no more than 18 hours
+#SBATCH -t 12:00:00
+#Launch on 20 cores distributed over as many nodes as needed
+#SBATCH --ntasks=20
+#SBATCH -N 1
+#Assume need 6 GB/core (6144 MB/core)
+#SBATCH --mem-per-cpu=6144
+#SBATCH --mail-user=awikner1@umd.edu
+#SBATCH --mail-type=BEGIN
+#SBATCH --mail-type=END
+
+import os, sys
+sys.path.append('/lustre/awikner1/Reservoir-GN-RL/')
+
 from reservoir_rls_multires import *
 import matplotlib.pyplot as plt
 from lorenz63 import *
 from scipy.signal import welch, periodogram
 from sklearn.preprocessing import StandardScaler
 import cma
-import os
+import functools
 
 data_length = 1000000
 step = 0.05
@@ -33,15 +48,15 @@ opts.set('popsize',10*x0.size) # Set number of samples per generation
 """
 Set bounds on parameters. IMPORTANT: The mean returned by cma-es is
 the mean BEFORE the boundary function is applied, so the mean may not
-lie in the domain set by bounds. To obtain the true sample mean requires 
-downloading the cma-es package from github and editing one of the 
+lie in the domain set by bounds. To obtain the true sample mean requires
+downloading the cma-es package from github and editing one of the
 functions. Ask me if you need to do this.
 """
-opts.set('bounds', [0,10]) 
+opts.set('bounds', [0,10])
 opts.set('seed', 5) # Seed for the initial samples
 opts.set('maxiter', 20)
 """
-File where results are saved. IMPORTANT: Full covariance matrix is 
+File where results are saved. IMPORTANT: Full covariance matrix is
 NOT saved, nor are the exact samples. If these need to be saved, one
 will also have to download from github and make some edits. Again,
 ask me.

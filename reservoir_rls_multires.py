@@ -40,7 +40,7 @@ class reservoir:
             self.initializeA(average_degree, spectral_radius, seed) # Initialize the adjacency matrix
         else:
             self.A = A*spectral_radius
-        
+
     def initializeWin(self, input_weight, seed):
         # Initialize the input matrix. Here, we choose this matrix to be
         # sparse such that each node receives input from only one input.
@@ -54,7 +54,7 @@ class reservoir:
             self.Win[q:qnext,i] = (-1 + 2*np.random.randn(nodes_per_input))*input_weight
             q = np.copy(qnext)
             qnext += nodes_per_input
-            
+
     def initializeA(self, average_degree, spectral_radius, seed):
         # Initialize the adjacency matrix such that it has a maximum magnitude eigenvalue
         # equal to the spectral radius
@@ -62,15 +62,15 @@ class reservoir:
         density = average_degree/self.num_nodes # Set the density
         self.A  = sparse.random(self.num_nodes, self.num_nodes, density = density)
         e       = linalg.eigs(self.A, k = 1, return_eigenvectors=False)
-        self.A  = self.A*spectral_radius/np.abs(e[0]) # Rescale to spectral radius       
-        
+        self.A  = self.A*spectral_radius/np.abs(e[0]) # Rescale to spectral radius
+
     def advance(self, input):
         # Update the reservoir state using the tanh activation function
         if isinstance(input,np.ndarray):
             self.r = updateRes(self.r, self.leakage, self.A, self.Win, input)
         else:
             self.r = updateRes(self.r, self.leakage, self.A, self.Win, np.array([input]))
-    
+
     def getTargetFeatureArray(self, aug_states, train_data, pass_inputs, pass_external, sync_length):
         target_array = train_data[sync_length:]
         feature_array = aug_states
@@ -85,9 +85,9 @@ class reservoir:
             if len(pass_external_data.shape)==1:
                 pass_external_data = pass_external_data.reshape(-1,1)
             feature_array   = np.hstack((feature_array, pass_external_data))
-            
+
         return target_array, feature_array
-        
+
     def trainWout(self, train_data, sync_length, pass_data = [], external_input = True, external_output = False):
         self.external_input  = external_input
         self.external_output = external_output
@@ -156,7 +156,7 @@ class reservoir:
         # Advance reservoir state to beginning of test data
         self.advance(input_data[-1])
         self.last_input = input_data[-1]
-        
+
     def updateWout(self, new_train_data):
         new_aug_states = np.zeros((new_train_data.shape[0], self.num_nodes))
         aug_r = np.copy(self.r)
@@ -167,7 +167,7 @@ class reservoir:
             aug_r = np.copy(self.r)
             aug_r[::2] = np.power(aug_r[::2],2)
             new_aug_states[t+1] = aug_r
-        
+
         aug_states = np.vstack((self.aug_states, new_aug_states))
         target_data = np.vstack((self.target_data, new_train_data))
         if not self.t_weighted:
@@ -176,7 +176,7 @@ class reservoir:
             self.Wout, self.aug_states, self.target_data = computeWoutTweighted(aug_states, target_data, self.forget, \
                 self.regularization, self.t_regularization, self.timestep)
         self.advance(new_train_data[-1])
-        
+
     def trainWoutRLS(self, train_data, sync_length):
         # Train the output matrix using Regularized recursive least squares with forgetting
         self.r = np.zeros(self.num_nodes)
@@ -223,7 +223,7 @@ class reservoir:
                 aug_r[::2]          = np.power(aug_r[::2],2) # Square every other node
                 aug_r_tweighted     = np.append(aug_r,np.zeros(self.num_nodes))
                 # Use RRLSwF to update target and covariance matrices
-                self.data_trstates       = updateTarget_tweighted(self.data_trstates, aug_r_tweighted, train_data[t], self.forget, t_update_mat_T) 
+                self.data_trstates       = updateTarget_tweighted(self.data_trstates, aug_r_tweighted, train_data[t], self.forget, t_update_mat_T)
                 self.states_trstates_inv = updateCovReg_tweighted(self.states_trstates_inv, aug_r_tweighted, inv_forget,t_update_mat_inv,\
                     regularization_mat, self.RLS_reg_type)
             # Compute Wout
@@ -235,10 +235,10 @@ class reservoir:
                 reg_states_trstates_inv = solve(np.identity(self.states_trstates_inv.shape[0]) + \
                     regularization_mat * self.states_trstates_inv.T, self.states_trstates_inv.T).T
                 self.Wout = self.data_trstates @ reg_states_trstates_inv
-        
+
         # Advance reservoir state to beginning of test data
         self.advance(train_data[-1])
-        
+
     def updateWoutRLS(self, new_train_data):
         # Train the output matrix using Regularized recursive least squares with forgetting
         inv_forget = 1/self.forget
@@ -248,14 +248,14 @@ class reservoir:
             aug_r[::2]          = np.power(aug_r[::2],2) # Square every other node
             # Use RRLSwF to update target and covariance matrices
             regularization_mat       = self.LM_regularization * np.ones(self.num_nodes).reshape(-1,1)
-            self.data_trstates       = updateTarget(self.data_trstates, aug_r, new_train_data[0], self.forget) 
+            self.data_trstates       = updateTarget(self.data_trstates, aug_r, new_train_data[0], self.forget)
             self.states_trstates_inv = updateCovReg(self.states_trstates_inv, aug_r, inv_forget, regularization_mat, self.RLS_reg_type)
             for t in range(new_train_data.shape[0]-1):
                 self.advance(new_train_data[t]) #Advance reservoir state
                 aug_r               = np.copy(self.r)
                 aug_r[::2]          = np.power(aug_r[::2],2) # Square every other node
                 # Use RRLSwF to update target and covariance matrices
-                self.data_trstates       = updateTarget(self.data_trstates, aug_r, new_train_data[t+1], self.forget) 
+                self.data_trstates       = updateTarget(self.data_trstates, aug_r, new_train_data[t+1], self.forget)
                 self.states_trstates_inv = updateCovReg(self.states_trstates_inv, aug_r, inv_forget, regularization_mat, self.RLS_reg_type)
             # Compute Wout
             if self.RLS_reg_type == 'LM':
@@ -274,7 +274,7 @@ class reservoir:
             aug_r[::2]          = np.power(aug_r[::2],2) # Square every other node
             aug_r_tweighted     = np.append(aug_r,np.zeros(self.num_nodes))
             # Use RRLSwF to update target and covariance matrices
-            self.data_trstates       = updateTarget_tweighted(self.data_trstates, aug_r_tweighted, new_train_data[0], self.forget, t_update_mat_T) 
+            self.data_trstates       = updateTarget_tweighted(self.data_trstates, aug_r_tweighted, new_train_data[0], self.forget, t_update_mat_T)
             self.states_trstates_inv = updateCovReg_tweighted(self.states_trstates_inv, aug_r_tweighted, inv_forget,t_update_mat_inv,\
                 regularization_mat, self.RLS_reg_type)
             for t in range(new_train_data.shape[0]-1):
@@ -284,7 +284,7 @@ class reservoir:
                 aug_r_tweighted     = np.append(aug_r,np.zeros(self.num_nodes))
                 # Use RRLSwF to update target and covariance matrices
                 self.data_trstates       = updateTarget_tweighted(self.data_trstates, aug_r_tweighted, \
-                    new_train_data[t+1], self.forget,t_update_mat_T) 
+                    new_train_data[t+1], self.forget,t_update_mat_T)
                 self.states_trstates_inv = updateCovReg_tweighted(self.states_trstates_inv, aug_r_tweighted, inv_forget,t_update_mat_inv,\
                     regularization_mat, self.RLS_reg_type)
             # Compute Wout
@@ -298,7 +298,7 @@ class reservoir:
                 self.Wout = self.data_trstates @ reg_states_trstates_inv
         # Advance reservoir state to beginning of test data
         self.advance(new_train_data[-1])
-        
+
     def synchronize(self, sync_data):
         sync_length = sync_data.shape[0]
         self.r = np.zeros(self.num_nodes)
@@ -306,7 +306,7 @@ class reservoir:
         for t in range(sync_length):
             self.advance(sync_data[t])
         self.last_input = sync_data[t]
-                
+
     def predict(self, pass_inputs, pass_external):
         # Square every other node and apply Wout to obtain a prediction
         aug_r = np.copy(self.r)
@@ -320,7 +320,7 @@ class reservoir:
         output = self.Wout @ aug_r
         self.last_input = output
         return output
-    
+
     def predict_tweighted(self, time, pass_inputs, pass_external):
         # Square every other node and apply Wout to obtain a prediction
         aug_r = np.copy(self.r)
@@ -335,12 +335,12 @@ class reservoir:
         output = self.Wout @ aug_r_tweighted
         self.last_input = output
         return output
-        
+
     def valid_time(self, validation_data, pass_data = [], error_bound = 0.2, plot = False):
         # Given an error bound, compute the valid time of prediction.
         # Plot the prediction if specified.
         n,d = validation_data.shape
-        
+
         if isinstance(pass_data, tuple):
             pass_inputs   = pass_data[0]
             pass_external = pass_data[1]
@@ -386,7 +386,7 @@ class reservoir:
                 valid_time += 1 # Otherwise, update valid time and feed back prediction
                 self.advance(predictions[i])
                 time += self.timestep
-            
+
         # if valid_time == validation_data.shape[0]-1:
         #     raise ValueError
         # Plot prediction if specified
@@ -407,7 +407,7 @@ class reservoir:
             max_plot_time = int(8/0.05)
             plot_predictions = predictions[:i]
             plot_validation = validation_data[:i]
-            
+
             fig1 = plt.figure(figsize = (7,2))
             # plt.plot((np.arange(max_plot_time)+1)*self.timestep, plot_predictions[:max_plot_time,0])
             plt.plot((np.arange(max_plot_time)+1)*self.timestep, plot_predictions[:max_plot_time])
@@ -428,7 +428,7 @@ class reservoir:
             """
             # plt.savefig('prediction_rossler_forget%0.2f.svg' % self.forget)
             plt.show()
-            
+
             """
             fig2 = plt.figure(figsize = (7,2))
             plt.plot((np.arange(max_plot_time)+1)*self.timestep, plot_predictions[:max_plot_time,1])
@@ -445,7 +445,7 @@ class reservoir:
                 labelbottom=False) # labels along the bottom edge are off
             plt.savefig('prediction_y_forget%0.2f.svg' % self.forget)
             plt.show()
-            
+
             fig3 = plt.figure(figsize = (7,2))
             plt.plot((np.arange(max_plot_time)+1)*self.timestep, plot_predictions[:max_plot_time,2])
             plt.plot((np.arange(max_plot_time)+1)*self.timestep, plot_validation[:max_plot_time,2])
@@ -461,7 +461,7 @@ class reservoir:
                 labelbottom=False) # labels along the bottom edge are off
             plt.savefig('prediction_z_forget%0.2f.svg' % self.forget)
             plt.show()
-            
+
             fig4 = plt.figure(figsize = (7,2))
             print(error_bound)
             plt.plot(np.array([0,8]),np.array([3.2,3.2]))
@@ -476,7 +476,7 @@ class reservoir:
             """
         self.r = initial_r
         return valid_time
-    
+
 class double_reservoir:
     def __init__(self, input_size, approx_num_nodes, input_weight = [1,1], \
                 spectral_radius = [0.9,0.9], leakage = [0,0], average_degree = [3,3], \
@@ -492,7 +492,7 @@ class double_reservoir:
                 LM_t_regularization[0], t_regularization[0], \
                 t_weighted, RLS_reg_type, Win[0], \
                 A[0], seed)
-        
+
         self.res2 = reservoir(input_size, approx_num_nodes, input_weight[1], \
                 spectral_radius[1], leakage[1], average_degree[1], \
                 forget[1], LM_regularization[1], \
@@ -500,34 +500,34 @@ class double_reservoir:
                 LM_t_regularization[1], t_regularization[1], \
                 t_weighted, RLS_reg_type, Win[1], \
                 A[1], seed)
-        
+
     def advance(self, input1, input2):
         # Update the reservoir state using the tanh activation function
         self.res1.advance(input1)
         self.res2.advance(input2)
-        
+
     def trainWout(self, train_data_1, train_data_2, \
                   target_data_1, target_data_2, sync_length):
         # Train the output matrix using the standard ridge regression algorithm
         self.res1.trainWout(train_data_1, sync_length)
         self.res2.trainWout(train_data_2, sync_length)
-        
+
     def synchronize(self, sync_data_1, sync_data_2):
         self.res1.synchronize(sync_data_1)
         self.res2.synchronize(sync_data_2)
-        
+
     def predict(self):
         # Square every other node and apply Wout to obtain a prediction
         out1 = self.res1.predict()
         out2 = self.res2.predict()
         return out1, out2
-    
+
     def predict_tweighted(self, time):
         # Square every other node and apply Wout to obtain a prediction
         out1 = self.res1.predict_tweighted(time)
         out2 = self.res2.predict_tweighted(time)
         return out1, out2
-    
+
     def valid_time(self, validation_data, error_bound = 0.2, plot = False):
         # Given an error bound, compute the valid time of prediction.
         # Plot the prediction if specified.
@@ -562,7 +562,7 @@ class double_reservoir:
                 in_data = np.hstack((out1, out2))
                 self.advance(in_data, in_data)
                 time += self.timestep
-            
+
 def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 210, \
                          num_tests = 200, sync_length = 200, train_length = 400, \
                          pred_length = 400, separated = False):
@@ -593,7 +593,7 @@ def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 
         res = reservoir(1, num_nodes, Win = base_Win, A = base_A, forget = forget, \
             input_weight = input_weight, spectral_radius = spectral_radius, \
             regularization = regularization, leakage = leakage)
-    
+
     if separated:
         valid_times = cross_validation_performance_separated(data, res, num_tests, sync_length, \
                                                    train_length, pred_length, \
@@ -607,7 +607,7 @@ def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 
 
 def vt_min_function_norm_external(data, external_data, hyperparams, mask, base_Win, base_A, num_nodes = 210, \
                          num_tests = 200, sync_length = 200, train_length = 400, \
-                         pred_length = 400, separated = False, external_output = True):
+                         pred_length = 400, separated = False, external_output = True, progress = False):
     # print(hyperparams)
     input_weight = 0.01
     spectral_radius = 0.9
@@ -635,7 +635,7 @@ def vt_min_function_norm_external(data, external_data, hyperparams, mask, base_W
         res = reservoir(1, num_nodes, Win = base_Win, A = base_A, forget = forget, \
             input_weight = input_weight, spectral_radius = spectral_radius, \
             regularization = regularization, leakage = leakage)
-    
+
     if separated:
         valid_times = cross_validation_performance_separated(data, res, num_tests, sync_length, \
                                                    train_length, pred_length, \
@@ -643,7 +643,8 @@ def vt_min_function_norm_external(data, external_data, hyperparams, mask, base_W
     else:
         valid_times = cross_validation_performance_resync_wextern(data, external_data, res, num_tests, sync_length, \
                                                    train_length, pred_length, \
-                                                   train_method = 'Normal', external_output = external_output)
+                                                   train_method = 'Normal', external_output = external_output,\
+                                                   progress = progress)
     # print('Input Weight: %e, Reg: %e' % (input_weight, regularization))
     return -np.median(valid_times)
 
@@ -659,19 +660,19 @@ def vt_min_function_rls(data, hyperparams, mask, base_Win, base_A, num_nodes = 2
     for i in range(len(mask)):
         if mask[i] == 'input_weight':
             input_weight = 0.2*(hyperparams[i]-5.)
-            param_str = param_str + 'Input Weight: %f, ' % (input_weight) 
+            param_str = param_str + 'Input Weight: %f, ' % (input_weight)
         elif mask[i] == 'spectral_radius':
             spectral_radius = expit(hyperparams[i])
-            param_str = param_str + 'Spectral Radius: %f, ' % (spectral_radius) 
+            param_str = param_str + 'Spectral Radius: %f, ' % (spectral_radius)
         elif mask[i] == 'LM_regularization':
             LM_regularization = 10.**(-3/5*hyperparams[i]-6.)
-            param_str = param_str + 'LM Reg: %e, ' % (LM_regularization) 
+            param_str = param_str + 'LM Reg: %e, ' % (LM_regularization)
         elif mask[i] == 'leakage':
             leakage = expit(hyperparams[i])
-            param_str = param_str + 'Leakage: %f, ' % (leakage) 
+            param_str = param_str + 'Leakage: %f, ' % (leakage)
         elif mask[i] == 'forget':
             forget = 1 - 10**(-0.5*hyperparams[i]-1.)
-            param_str = param_str + 'Forget: %f, ' % (forget) 
+            param_str = param_str + 'Forget: %f, ' % (forget)
         else:
             raise ValueError
     tic = time.perf_counter()
@@ -700,7 +701,7 @@ def cross_validation_performance(data, reservoir, num_tests, sync_length, train_
     split_starts = np.random.choice(max_start,size = num_tests,replace = False)
     valid_times = np.zeros(num_tests)
     # For each starting point
-    if progress: 
+    if progress:
         with tqdm(total = num_tests) as pbar:
             for i in range(num_tests):
                 train_data      = data[split_starts[i]:split_starts[i]+sync_length+train_length] # Get training data
@@ -726,7 +727,7 @@ def cross_validation_performance(data, reservoir, num_tests, sync_length, train_
                 reservoir.trainWout(train_data, sync_length)
             # Evaluate the prediction
             valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax)
-        
+
     return valid_times
 
 def cross_validation_performance_resync(data, reservoir, num_tests, sync_length, train_length, pred_length, \
@@ -753,7 +754,7 @@ def cross_validation_performance_resync(data, reservoir, num_tests, sync_length,
     split_pred_starts = [int(i) for i in split_pred_starts]
     valid_times = np.zeros(num_tests)
     # For each starting point
-    if progress: 
+    if progress:
         with tqdm(total = num_tests) as pbar:
             for i in range(num_tests):
                 train_data      = data[split_train_starts[i]:split_train_starts[i]+sync_length+train_length] # Get training data
@@ -783,7 +784,7 @@ def cross_validation_performance_resync(data, reservoir, num_tests, sync_length,
             # Evaluate the prediction
             reservoir.synchronize(resync_data)
             valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax, plot = plot)
-        
+
     return valid_times
 
 def cross_validation_performance_resync_wextern(data, external_data, reservoir, num_tests, sync_length, train_length, pred_length, \
@@ -813,7 +814,7 @@ def cross_validation_performance_resync_wextern(data, external_data, reservoir, 
     split_pred_starts = [int(i) for i in split_pred_starts]
     valid_times = np.zeros(num_tests)
     # For each starting point
-    if progress: 
+    if progress:
         with tqdm(total = num_tests) as pbar:
             for i in range(num_tests):
                 external_data_train   = external_data[split_train_starts[i]:split_train_starts[i]+sync_length+train_length] # Get external data
@@ -859,7 +860,7 @@ def cross_validation_performance_resync_wextern(data, external_data, reservoir, 
             # Evaluate the prediction
             reservoir.synchronize(resync_data)
             valid_times[i]  = reservoir.valid_time(validation_data, external_data_test, error_bound = errormax, plot = plot)
-        
+
     return valid_times
 
 def cross_validation_performance_versust(data, reservoir, sync_length, train_length, pred_length, \
@@ -871,7 +872,7 @@ def cross_validation_performance_versust(data, reservoir, sync_length, train_len
     num_gaps = num_tests
     valid_times = np.zeros(num_tests)
     # For each starting point
-    if progress: 
+    if progress:
         with tqdm(total = num_gaps) as pbar:
             for i in range(num_tests):
                 # Get validation data
@@ -900,7 +901,7 @@ def cross_validation_performance_versust(data, reservoir, sync_length, train_len
             validation_data = data[sync_length+train_lengths[i]:sync_length+train_lengths[i]+pred_length]
             if i == 0:
                 train_data = data[:sync_length+train_lengths[i]] # Get training data
-                
+
                 # Train the reservoir
                 if train_method == 'RLS':
                     reservoir.trainWoutRLS(train_data, sync_length)
@@ -915,7 +916,7 @@ def cross_validation_performance_versust(data, reservoir, sync_length, train_len
                     reservoir.updateWout(train_data)
             # Evaluate the prediction
             valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax)
-        
+
     return valid_times
 
 def cross_validation_performance_movingwindow(data, reservoir, sync_length, train_length, pred_length, \
@@ -927,7 +928,7 @@ def cross_validation_performance_movingwindow(data, reservoir, sync_length, trai
     num_gaps = num_tests
     valid_times = np.zeros(num_tests)
     # For each starting point
-    if progress: 
+    if progress:
         with tqdm(total = num_gaps) as pbar:
             for i in range(num_tests):
                 # Get validation data
@@ -971,7 +972,7 @@ def cross_validation_performance_movingwindow(data, reservoir, sync_length, trai
                     reservoir.trainWout(train_data, sync_length)
             # Evaluate the prediction
             valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax)
-        
+
     return valid_times
 
 def cross_validation_performance_separated(data, reservoir, num_tests, sync_length, train_length, pred_length, \
@@ -984,13 +985,13 @@ def cross_validation_performance_separated(data, reservoir, num_tests, sync_leng
     num_gaps = num_tests
     valid_times = np.zeros(num_tests)
     # For each starting point
-    if progress: 
+    if progress:
         with tqdm(total = num_gaps) as pbar:
             for i in range(num_tests):
                 # Get validation data
                 validation_data = data[train_lengths[i] + sync_length + train_length:train_lengths[i] + pred_length + sync_length + train_length]
                 train_data = data[train_lengths[i]:train_lengths[i] + train_length + sync_length] # Get training data
-                
+
                 # print((train_lengths[i], train_lengths[i] + train_length + sync_length))
                 # Train the reservoir
                 if train_method == 'RLS':
@@ -1017,7 +1018,7 @@ def cross_validation_performance_separated(data, reservoir, num_tests, sync_leng
             # print((train_lengths[i] + sync_length + train_length, train_lengths[i] + pred_length + sync_length + train_length))
             # Evaluate the prediction
             valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax, plot = (plot and i == plot_idx))
-        
+
     return valid_times
 
 def cross_validation_performance_wscaling(data, reservoir, num_tests, sync_length, train_length, pred_length, seed = 10, errormax = 0.2):
@@ -1034,7 +1035,7 @@ def cross_validation_performance_wscaling(data, reservoir, num_tests, sync_lengt
             split_starts[i]+sync_length+train_length+pred_length])
         reservoir.trainWoutRLS(train_data, sync_length)
         valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax)
-        
+
     return valid_times
 
 @jit(nopython = True, fastmath = True)
@@ -1052,7 +1053,7 @@ def updateCovReg(states_trstates_inv, aug_r, inv_forget, regularization_mat, RLS
         states_trstates_inv = states_trstates_inv - \
             regularization_mat * (states_trstates_inv @ states_trstates_inv)
     return states_trstates_inv
-                                         
+
 def updateTarget_tweighted(data_trstates, aug_r, input, forget, t_update_mat_T):
     data_trstates = forget * data_trstates @ t_update_mat_T + np.outer(input,aug_r)
     return data_trstates
