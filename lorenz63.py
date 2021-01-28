@@ -139,8 +139,10 @@ def getRosslerData(data_length, r_t, dxdt_lorenz,transient_length = 1000, tau = 
 def getCoupledLorenzData(data_length, r_t, dxdt_lorenz, transient_length = 1000, tau = 0.01,sample_tau = 0.05, seed = 5):
     # Obtains time series of Lorenz '63 states after some initial transient time
     sampling_rate = round(sample_tau/tau)
-    np.random.seed(seed)
-    x = np.random.rand(6)+np.array([0,0,0,0,-5,0])
+    np.random.seed(5)
+    xr = np.random.rand(3) + np.array([0,-5,0])
+    np.random.rand(seed)
+    x = np.append(np.random.rand(3), xr)
     time = -transient_length*tau
     for i in range(0,transient_length):
         x = rk4(x,time,tau,r_t,dxdt_lorenz)

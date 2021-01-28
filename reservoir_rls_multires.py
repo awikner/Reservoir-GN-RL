@@ -565,7 +565,7 @@ class double_reservoir:
 
 def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 210, \
                          num_tests = 200, sync_length = 200, train_length = 400, \
-                         pred_length = 400, separated = False):
+                         pred_length = 400, separated = False, evenspace = False, returnall = False):
     # print(hyperparams)
     input_weight = 0.01
     spectral_radius = 0.9
@@ -601,13 +601,17 @@ def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 
     else:
         valid_times = cross_validation_performance_resync(data, res, num_tests, sync_length, \
                                                    train_length, pred_length, \
-                                                   train_method = 'Normal')
+                                                   train_method = 'Normal', evenspace = evenspace)
     # print('Input Weight: %e, Reg: %e' % (input_weight, regularization))
-    return -np.median(valid_times)
+    if returnall:
+        return valid_times
+    else:
+        return -np.median(valid_times)
 
 def vt_min_function_norm_external(data, external_data, hyperparams, mask, base_Win, base_A, num_nodes = 210, \
                          num_tests = 200, sync_length = 200, train_length = 400, \
-                         pred_length = 400, separated = False, external_output = True, progress = False):
+                         pred_length = 400, separated = False, external_output = True, progress = False,\
+                         evenspace = False, returnall = False):
     # print(hyperparams)
     input_weight = 0.01
     spectral_radius = 0.9
@@ -644,9 +648,12 @@ def vt_min_function_norm_external(data, external_data, hyperparams, mask, base_W
         valid_times = cross_validation_performance_resync_wextern(data, external_data, res, num_tests, sync_length, \
                                                    train_length, pred_length, \
                                                    train_method = 'Normal', external_output = external_output,\
-                                                   progress = progress)
+                                                   progress = progress, evenspace = evenspace)
     # print('Input Weight: %e, Reg: %e' % (input_weight, regularization))
-    return -np.median(valid_times)
+    if returnall:
+        return valid_times
+    else:
+        return -np.median(valid_times)
 
 def vt_min_function_rls(data, hyperparams, mask, base_Win, base_A, num_nodes = 210, \
                          num_tests = 200, sync_length = 200, train_length = 400, \
@@ -731,7 +738,8 @@ def cross_validation_performance(data, reservoir, num_tests, sync_length, train_
     return valid_times
 
 def cross_validation_performance_resync(data, reservoir, num_tests, sync_length, train_length, pred_length, \
-                                 seed = 5, errormax = 3.2, train_method = 'RLS', progress = False, plot = False):
+                                 seed = 5, errormax = 3.2, train_method = 'RLS', progress = True, plot = False,\
+                                 evenspace = False):
     # Evaluates the valid time of prediction over a random set of training time series and test time series
     data_length = data.shape[0]
     max_train_start = data_length - train_length - sync_length
@@ -752,6 +760,9 @@ def cross_validation_performance_resync(data, reservoir, num_tests, sync_length,
             split_pred_starts[i] = np.random.choice(np.append(np.arange(split_train_starts[i] - sync_length - pred_length),\
                 np.arange(split_train_starts[i] + sync_length + train_length, max_pred_start)), size = preds_per_train)
     split_pred_starts = [int(i) for i in split_pred_starts]
+    if evenspace:
+        start_disp = data_length//num_tests
+        split_pred_starts = [int(i) for i in np.arange(num_tests)*start_disp]
     valid_times = np.zeros(num_tests)
     # For each starting point
     if progress:
@@ -789,7 +800,7 @@ def cross_validation_performance_resync(data, reservoir, num_tests, sync_length,
 
 def cross_validation_performance_resync_wextern(data, external_data, reservoir, num_tests, sync_length, train_length, pred_length, \
                                  seed = 5, errormax = 3.2, train_method = 'RLS', external_input = True,\
-                                 external_output = False, progress = False, plot = False):
+                                 external_output = False, progress = True, plot = False, evenspace = False):
     if len(external_data.shape)==1:
         external_data = external_data.reshape(-1,1)
     # Evaluates the valid time of prediction over a random set of training time series and test time series
@@ -812,6 +823,10 @@ def cross_validation_performance_resync_wextern(data, external_data, reservoir, 
             split_pred_starts[i] = np.random.choice(np.append(np.arange(split_train_starts[i] - sync_length - pred_length),\
                 np.arange(split_train_starts[i] + sync_length + train_length, max_pred_start)), size = preds_per_train)
     split_pred_starts = [int(i) for i in split_pred_starts]
+    if evenspace:
+        start_disp = data_length//num_tests
+        split_pred_starts = [int(i) for i in np.arange(num_tests)*start_disp]
+    print(split_pred_starts)
     valid_times = np.zeros(num_tests)
     # For each starting point
     if progress:
