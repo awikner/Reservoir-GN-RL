@@ -576,7 +576,7 @@ def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 
         if mask[i] == 'input_weight':
             input_weight = 0.2*(hyperparams[i]-5)
         elif mask[i] == 'spectral_radius':
-            spectral_radius = hyperparams[i]
+            spectral_radius = expit(hyperparams[i]-5)
         elif mask[i] == 'regularization':
             regularization = 10.**(-hyperparams[i]-3.0)
         elif mask[i] == 'leakage':
@@ -622,7 +622,7 @@ def vt_min_function_norm_external(data, external_data, hyperparams, mask, base_W
         if mask[i] == 'input_weight':
             input_weight = 0.2*(hyperparams[i]-5)
         elif mask[i] == 'spectral_radius':
-            spectral_radius = hyperparams[i]
+            spectral_radius = expit(hyperparams[i]-5)
         elif mask[i] == 'regularization':
             regularization = 10.**(-hyperparams[i]-3.0)
         elif mask[i] == 'leakage':
