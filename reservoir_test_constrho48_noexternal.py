@@ -55,7 +55,6 @@ functions. Ask me if you need to do this.
 """
 opts.set('bounds', [0,10])
 opts.set('seed', 5) # Seed for the initial samples
-opts.set('maxiter', 20)
 """
 File where results are saved. IMPORTANT: Full covariance matrix is
 NOT saved, nor are the exact samples. If these need to be saved, one
