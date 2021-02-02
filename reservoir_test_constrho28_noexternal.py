@@ -39,10 +39,10 @@ pred_length = 500
 res_seed = 1
 base_res = reservoir(3,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius']
-x0 = np.array([6,4,0,7.3])
+x0 = np.array([5.047736256255968, 8.50187004317325, 1.633587430607175, 5.508895844774642])
 min_func_base = lambda x: vt_min_function_norm(np.ascontiguousarray(lorenz_data_cosine), x, mask,\
     base_res.Win, base_res.A, num_nodes, num_tests, sync_length, train_length, pred_length)
-sigma = 2
+sigma = 0.55
 
 opts = cma.CMAOptions()
 opts.set('popsize',10*x0.size) # Set number of samples per generation
@@ -55,6 +55,7 @@ functions. Ask me if you need to do this.
 """
 opts.set('bounds', [0,10])
 opts.set('seed', 5) # Seed for the initial samples
+opts.set('verb_append', 1)
 """
 File where results are saved. IMPORTANT: Full covariance matrix is
 NOT saved, nor are the exact samples. If these need to be saved, one

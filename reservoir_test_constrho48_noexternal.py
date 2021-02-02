@@ -1,6 +1,6 @@
 #!/homes/awikner1/.python-venvs/reservoir-rls/bin/python -u
 #Assume will be finished in no more than 18 hours
-#SBATCH -t 36:00:00
+#SBATCH -t 18:00:00
 #Launch on 20 cores distributed over as many nodes as needed
 #SBATCH --ntasks=20
 #SBATCH -N 1
@@ -39,7 +39,7 @@ pred_length = 500
 res_seed = 1
 base_res = reservoir(3,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius']
-x0 = np.array([6,4,0,7.3])
+x0 = np.array([5.040739073735254, 9.200526375145127, 2.8077514788173614, 4.8599362517419165])
 min_func_base = lambda x: vt_min_function_norm(np.ascontiguousarray(lorenz_data_cosine), x, mask,\
     base_res.Win, base_res.A, num_nodes, num_tests, sync_length, train_length, pred_length)
 sigma = 2

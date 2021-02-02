@@ -1,6 +1,6 @@
 #!/homes/awikner1/.python-venvs/reservoir-rls/bin/python -u
 #Assume will be finished in no more than 18 hours
-#SBATCH -t 12:00:00
+#SBATCH -t 18:00:00
 #Launch on 20 cores distributed over as many nodes as needed
 #SBATCH --ntasks=20
 #SBATCH -N 1
@@ -38,10 +38,10 @@ pred_length = 500
 res_seed = 1
 base_res = reservoir(3,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'forget']
-x0 = np.array([6,4,0,9])
+x0 = np.array([4.636771438402045, 5.6364128276072565, 5.673582356077067, 9.196194509537818])
 min_func_base = lambda x: vt_min_function_norm(np.ascontiguousarray(lorenz_data_cosine), x, mask,\
     base_res.Win, base_res.A, num_nodes, num_tests, sync_length, train_length, pred_length)
-sigma = 2
+sigma = 1.06
 
 opts = cma.CMAOptions()
 opts.set('popsize',10*x0.size) # Set number of samples per generation
@@ -54,19 +54,18 @@ functions. Ask me if you need to do this.
 """
 opts.set('bounds', [0,10])
 opts.set('seed', 5) # Seed for the initial samples
-opts.set('maxiter', 20)
 """
 File where results are saved. IMPORTANT: Full covariance matrix is
 NOT saved, nor are the exact samples. If these need to be saved, one
 will also have to download from github and make some edits. Again,
 ask me.
 """
-foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_noextern_res%d\\' % res_seed
+foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_noextern_res%d' % res_seed
 if not os.path.exists(foldername):
     os.makedirs(foldername)
 else:
     for root, dirs, files in os.walk(foldername):
         for file in files:
             os.remove(os.path.join(root, file))
-opts.set('verb_filenameprefix',foldername)
+opts.set('verb_filenameprefix',foldername + '/')
 results = cma.fmin(min_func_base, x0, sigma, options = opts) # Run the algorithm

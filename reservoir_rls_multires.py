@@ -578,7 +578,7 @@ def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 
         elif mask[i] == 'spectral_radius':
             spectral_radius = expit(hyperparams[i]-5)
         elif mask[i] == 'regularization':
-            regularization = 10.**(-hyperparams[i]-3.0)
+            regularization = 10.**(-hyperparams[i]-2.0)
         elif mask[i] == 'leakage':
             leakage = expit(hyperparams[i]-5)
         elif mask[i] == 'forget':
