@@ -88,7 +88,8 @@ class reservoir:
 
         return target_array, feature_array
 
-    def trainWout(self, train_data, sync_length, pass_data = [], external_input = True, external_output = False):
+    def trainWout(self, train_data, sync_length, pass_data = [], noise_scale = 0, noise_seed = 10,\
+                  noise_realizations = 1, external_input = True, external_output = False):
         self.external_input  = external_input
         self.external_output = external_output
         if isinstance(pass_data, tuple):
@@ -110,24 +111,41 @@ class reservoir:
         # print(pass_external.shape)
         # print(input_data.shape)
         # Train the output matrix using the standard ridge regression algorithm
-        self.r = np.zeros(self.num_nodes)
-        # First, synchronize reservoir to the trajectory
-        for t in range(sync_length-1):
-            self.advance(input_data[t])
-        aug_states = np.zeros((input_data.shape[0]-sync_length,self.num_nodes))
-        # Then, begin training over all remaining data points
-        for t in range(sync_length, input_data.shape[0]):
-            self.advance(input_data[t-1])
-            aug_r               = np.copy(self.r)
-            aug_r[::2]          = np.power(aug_r[::2],2) # Square every other node
-            aug_states[t-sync_length] = aug_r
+        train_length = input_data.shape[0] - sync_length
+        for k in range(noise_realizations):
+            np.random.seed(noise_seed)
+            noise = noise_scale*np.random.randn(train_data.shape[0], train_data.shape[1])
+            noisy_train_data_k = train_data+noise
+            if external_input and not pass_external.size == 0:
+                noisy_input_data_k = np.hstack((noisy_train_data_k, pass_external))
+            else:
+                noisy_input_data_k = noisy_train_data_k
+            self.r = np.zeros(self.num_nodes)
+            # First, synchronize reservoir to the trajectory
+            for t in range(sync_length-1):
+                self.advance(noisy_input_data_k[t])
+            aug_states = np.zeros((train_length,self.num_nodes))
+            # Then, begin training over all remaining data points
+            for t in range(sync_length, sync_length + train_length):
+                self.advance(noisy_input_data_k[t-1])
+                aug_r               = np.copy(self.r)
+                aug_r[::2]          = np.power(aug_r[::2],2) # Square every other node
+                aug_states[t-sync_length] = aug_r
+            new_target_array, new_feature_array = self.getTargetFeatureArray(aug_states, train_data,\
+                pass_inputs, pass_external, sync_length)
+            if k == 0:
+                target_array = new_target_array
+                feature_array = new_feature_array
+            else:
+                target_array = np.vstack((target_array, new_target_array))
+                feature_array = np.vstack((feature_array, new_feature_array))
+            noise_seed += 1
         # Compute Wout using ridge regression
         # plt.hist(aug_states[:,1::2].flatten(), 50)
         # plt.show()
         # plt.hist(aug_states[:,::2].flatten(), 50)
         # plt.show()
-        target_array, feature_array = self.getTargetFeatureArray(aug_states, train_data,\
-            pass_inputs, pass_external, sync_length)
+        
         # print(feature_array.shape)
         # print(target_array.shape)
         """
@@ -147,9 +165,9 @@ class reservoir:
         """
         if not self.t_weighted:
             self.Wout, self.aug_states, self.target_data = computeWout(target_array,\
-                feature_array, self.forget, self.regularization)
+                feature_array, noise_realizations, self.forget, self.regularization)
         else:
-            self.Wout, self.aug_states, self.target_data = computeWoutTweighted(target_array, feature_array, self.forget, \
+            self.Wout, self.aug_states, self.target_data = computeWoutTweighted(target_array, feature_array, noise_realizations, self.forget, \
                 self.regularization, self.t_regularization, self.timestep)
         # plt.plot(np.linalg.norm((np.transpose(self.Wout @ feature_array.T) - target_array)/np.std(target_array, axis = 0), axis = 1))
         # plt.show()
@@ -565,7 +583,8 @@ class double_reservoir:
 
 def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 210, \
                          num_tests = 200, sync_length = 200, train_length = 400, \
-                         pred_length = 400, separated = False, evenspace = False, returnall = False):
+                         pred_length = 400, separated = False, noise_scale = 0, noise_realizations = 1,\
+                         evenspace = False, returnall = False):
     # print(hyperparams)
     input_weight = 0.01
     spectral_radius = 0.9
@@ -601,7 +620,8 @@ def vt_min_function_norm(data, hyperparams, mask, base_Win, base_A, num_nodes = 
     else:
         valid_times = cross_validation_performance_resync(data, res, num_tests, sync_length, \
                                                    train_length, pred_length, \
-                                                   train_method = 'Normal', evenspace = evenspace)
+                                                   train_method = 'Normal', noise_scale = noise_scale,\
+                                                   noise_realizations = noise_realizations, evenspace = evenspace)
     # print('Input Weight: %e, Reg: %e' % (input_weight, regularization))
     if returnall:
         return valid_times
@@ -738,8 +758,8 @@ def cross_validation_performance(data, reservoir, num_tests, sync_length, train_
     return valid_times
 
 def cross_validation_performance_resync(data, reservoir, num_tests, sync_length, train_length, pred_length, \
-                                 seed = 5, errormax = 3.2, train_method = 'RLS', progress = True, plot = False,\
-                                 evenspace = False):
+                                 seed = 5, errormax = 3.2, train_method = 'RLS', noise_scale = 0, noise_realizations = 1,\
+                                 progress = True, plot = False, evenspace = False):
     # Evaluates the valid time of prediction over a random set of training time series and test time series
     data_length = data.shape[0]
     max_train_start = data_length - train_length - sync_length
@@ -776,7 +796,7 @@ def cross_validation_performance_resync(data, reservoir, num_tests, sync_length,
                 if train_method == 'RLS':
                     reservoir.trainWoutRLS(train_data, sync_length)
                 else:
-                    reservoir.trainWout(train_data, sync_length)
+                    reservoir.trainWout(train_data, sync_length, noise_scale = noise_scale, noise_realizations = noise_realizations)
                 # Evaluate the prediction
                 reservoir.synchronize(resync_data)
                 valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax, plot = plot)
@@ -791,7 +811,7 @@ def cross_validation_performance_resync(data, reservoir, num_tests, sync_length,
             if train_method == 'RLS':
                 reservoir.trainWoutRLS(train_data, sync_length)
             else:
-                reservoir.trainWout(train_data, sync_length)
+                reservoir.trainWout(train_data, sync_length, noise_scale = noise_scale, noise_realizations = noise_realizations)
             # Evaluate the prediction
             reservoir.synchronize(resync_data)
             valid_times[i]  = reservoir.valid_time(validation_data, error_bound = errormax, plot = plot)
@@ -1085,23 +1105,31 @@ def updateRes(r, leakage, A, Win, input):
     return newr
 
 
-@jit(nopython = True, fastmath = True)
-def computeWout(truth, features, forget, regularization):
+# @jit(nopython = True, fastmath = True)
+def computeWout(truth, features, noise_realizations, forget, regularization):
     n = features.shape[0]
     d = features.shape[1]
-    s_mat = np.power(forget,np.arange(n)[::-1])
+    s_mat_base = np.power(forget,np.arange(n//noise_realizations)[::-1])
+    s_mat = np.copy(s_mat_base)
+    for i in range(noise_realizations - 1):
+        s_mat = np.append(s_mat, s_mat_base)
     data_trstates = (truth.T * s_mat) @ features
     states_trstates = (features.T * s_mat) @ features
     WoutT = solve(states_trstates.T + regularization * np.identity(d), data_trstates.T)
     return WoutT.T, features, truth
 
-@jit(nopython = True, fastmath = True)
-def computeWoutTweighted(truth, features, forget, regularization,t_regularization, step):
+# @jit(nopython = True, fastmath = True)
+def computeWoutTweighted(truth, features, noise_realizations, forget, regularization,t_regularization, step):
     n,d = features.shape
-    s_mat = np.power(forget,np.arange(n)[::-1])
-    times = np.arange((1-n)*step,step,step)
-    if np.abs(times[-1] - step)<1e-6:
-        times = times[:times.size-1]
+    s_mat_base = np.power(forget,np.arange(n//noise_realizations)[::-1])
+    times_base = np.arange((1-n//noise_realizations)*step,step,step)
+    if np.abs(times_base[-1] - step)<1e-6:
+        times_base = times_base[:times_base.size-1]
+    s_mat = np.copy(s_mat_base)
+    times = np.copy(times_base)
+    for i in range(noise_realizations-1):
+        s_mat = np.append(s_mat, s_mat_base)
+        times = np.append(times, times_base)
     # t_scale_mat = sparse.diags(times)
     reg_mat = np.append(regularization*np.ones(d), t_regularization*np.ones(d))
     aug_states = np.concatenate((features, times.reshape(-1,1) *  features), axis = 1)
