@@ -52,7 +52,7 @@ train_length = 3000
 sync_length = 200
 pred_length = 500
 res_seed = 1
-base_res = reservoir(3,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
+base_res = reservoir(4,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'forget']
 x0 = np.array([4.899076309767498, 5.887994175687722, 2.7757037861539144, 7.493174873050889])
 min_func_base = functools.partial(min_func_wtruth, mask=mask, \
