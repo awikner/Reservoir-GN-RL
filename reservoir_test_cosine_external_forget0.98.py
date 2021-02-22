@@ -1,6 +1,6 @@
 #!/homes/awikner1/.python-venvs/reservoir-rls/bin/python -u
 #Assume will be finished in no more than 18 hours
-#SBATCH -t 18:00:00
+#SBATCH -t 24:00:00
 #Launch on 20 cores distributed over as many nodes as needed
 #SBATCH --ntasks=20
 #SBATCH -N 1
@@ -23,8 +23,8 @@ import functools
 
 
 def min_func_wtruth(x, mask, base_data, f_s, true_external_data,\
-    base_res, num_tests, num_nodes, pred_length, train_length, scale = True,
-    external_output = True, progress = True):
+    base_res, num_tests, num_nodes, pred_length, train_length, \
+    sync_length, scale = True, external_output = True, progress = True):
     init_delay = 0
     data = base_data[init_delay:]
     external_data = true_external_data[init_delay:]
@@ -33,7 +33,7 @@ def min_func_wtruth(x, mask, base_data, f_s, true_external_data,\
         external_data = SS.fit_transform(external_data.reshape(-1,1))
     funval = vt_min_function_norm_external(data,external_data, x, mask, base_res.Win, base_res.A, \
         num_tests = num_tests,  num_nodes = num_nodes, pred_length = pred_length, train_length = train_length,\
-        external_output = external_output, progress = progress)
+        sync_length = sync_length, external_output = external_output, progress = progress)
     return funval
 
 data_length = 1000000
@@ -56,12 +56,13 @@ sync_length = 200
 pred_length = 500
 res_seed = 1
 base_res = reservoir(4,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
-mask = ['input_weight', 'regularization', 'leakage', 'forget']
-x0 = np.array([5.071980365336762, 5.544142385647819, 2.605518524451397, 9.895984011796445])
-min_func_base = functools.partial(min_func_wtruth, mask=mask, \
+mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius','forget']
+x0 = np.array([5.071980365336762, 5.544142385647819, 2.605518524451397, 5.4])
+forget = 0.98
+min_func_base = lambda x: min_func_wtruth(np.append(x0, forget), mask=mask, \
         base_data = scaled_data, f_s=f_s, true_external_data = external_data,\
         base_res=base_res, num_tests=num_tests, num_nodes=num_nodes, \
-        pred_length=pred_length, train_length=train_length)
+        pred_length=pred_length, train_length=train_length, sync_length = sync_length)
 sigma = 1.25
 
 opts = cma.CMAOptions()
@@ -81,7 +82,7 @@ NOT saved, nor are the exact samples. If these need to be saved, one
 will also have to download from github and make some edits. Again,
 ask me.
 """
-foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_wtruthout_scaled_res%d' % res_seed
+foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_wtruthout_scaled_forget%f_res%d' % (forget, res_seed)
 if not os.path.exists(foldername):
     os.makedirs(foldername)
 else:

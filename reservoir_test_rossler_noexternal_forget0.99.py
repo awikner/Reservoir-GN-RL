@@ -1,6 +1,6 @@
 #!/homes/awikner1/.python-venvs/reservoir-rls/bin/python -u
 #Assume will be finished in no more than 18 hours
-#SBATCH -t 18:00:00
+#SBATCH -t 24:00:00
 #Launch on 20 cores distributed over as many nodes as needed
 #SBATCH --ntasks=20
 #SBATCH -N 1
@@ -38,11 +38,12 @@ sync_length = 200
 pred_length = 500
 res_seed = 1
 base_res = reservoir(3,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
-mask = ['input_weight', 'regularization', 'leakage', 'forget']
-x0 = np.array([5.229383600153468, 5.60936248102667, 1.8082637214812964, 9.183056092350851])
-min_func_base = lambda x: vt_min_function_norm(scaled_data, x, mask,\
+mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius', 'forget']
+x0 = np.array([5.229383600153468, 5.60936248102667, 1.8082637214812964, 5.4])
+forget = 0.99
+min_func_base = lambda x: vt_min_function_norm(scaled_data, np.append(x, forget), mask,\
     base_res.Win, base_res.A, num_nodes, num_tests, sync_length, train_length, pred_length)
-sigma = 0.7
+sigma = 1.25
 
 opts = cma.CMAOptions()
 opts.set('popsize',10*x0.size) # Set number of samples per generation
@@ -61,7 +62,7 @@ NOT saved, nor are the exact samples. If these need to be saved, one
 will also have to download from github and make some edits. Again,
 ask me.
 """
-foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_rossler_noextern_res%d' % res_seed
+foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_rossler_noextern_forget%f_res%d' % (forget, res_seed)
 if not os.path.exists(foldername):
     os.makedirs(foldername)
 else:
