@@ -1,0 +1,88 @@
+11:46:12
+noise level: 0.00021544346900351913
+res size: 100
+train time: 500
+11:48:59
+noise level: 0.00021544346900351913
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.4
+optimal alpha: 0.0031622776601683794
+
+11:51:44
+noise level: 0.0004641588833619256
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.62
+optimal alpha: 0.0031622776601683794
+
+11:54:04
+noise level: 0.0010000000000012557
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.58
+optimal alpha: 0.01
+
+11:56:24
+noise level: 0.002154434690034288
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.72
+optimal alpha: 0.01
+
+11:58:38
+noise level: 0.00464158883361731
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.88
+optimal alpha: 1e-08
+
+12:00:53
+noise level: 0.01000000000000837
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.96
+optimal alpha: 3.1622776601683795e-05
+
+12:04:35
+noise level: 0.02154434690033387
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.98
+optimal alpha: 3.162277660168379e-06
+
+12:07:15
+noise level: 0.04641588833615369
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.96
+optimal alpha: 0.00031622776601683794
+
+12:10:22
+noise level: 0.10000000000004182
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.28
+optimal alpha: 1e-06
+
+12:12:58
+noise level: 0.21544346900324837
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.04
+optimal alpha: 3.162277660168379e-06
+
+12:15:34
+noise level: 0.46415888336134226
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.0
+optimal alpha: 1e-08
+
+12:18:10
+noise level: 1.0
+res size: 100
+train time: 500
+max fraction of stable reservoirs: 0.0
+optimal alpha: 1e-08
+

@@ -1,2 +1,2 @@
-% # columns="iteration, evaluation, sigma, void, void,  stds==sigma*sqrt(diag(C))", seed=5, Mon Feb 22 17:45:03 2021, <python>{}</python>
-1 40 1.0429984092069684 0 0 0.9607566101813692 0.9328419999343781 1.212098161278558 1.0378054315829215
+% # columns="iteration, evaluation, sigma, void, void,  stds==sigma*sqrt(diag(C))", seed=5, Mon Feb 22 19:31:41 2021, <python>{}</python>
+1 40 1.2515980910483622 0 0 1.152907932217643 1.119410399921254 1.4545177935342695 1.2453665178995061

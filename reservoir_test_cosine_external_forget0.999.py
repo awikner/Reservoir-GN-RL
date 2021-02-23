@@ -43,6 +43,7 @@ scale = 0.01
 slow_var = 48/28
 
 lorenz_data_cosine = np.loadtxt('/lustre/awikner1/Reservoir-GN-RL/lorenz_data_cosine_step%0.2f.csv' %(step), delimiter = ',')
+# lorenz_data_cosine = np.loadtxt('lorenz_data_cosine_step%0.2f.csv' %(step), delimiter = ',')
 times = np.arange(lorenz_data_cosine.shape[0])*step
 external_data = r_t_cosine(times)
 
@@ -59,7 +60,7 @@ base_res = reservoir(4,num_nodes,input_weight = 1, spectral_radius = 1, seed = r
 mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius','forget']
 x0 = np.array([5.071980365336762, 5.544142385647819, 2.605518524451397, 5.4])
 forget = 0.999
-min_func_base = lambda x: min_func_wtruth(np.append(x0, forget), mask=mask, \
+min_func_base = lambda x: min_func_wtruth(np.append(x, forget), mask=mask, \
         base_data = scaled_data, f_s=f_s, true_external_data = external_data,\
         base_res=base_res, num_tests=num_tests, num_nodes=num_nodes, \
         pred_length=pred_length, train_length=train_length, sync_length = sync_length)
@@ -83,6 +84,7 @@ will also have to download from github and make some edits. Again,
 ask me.
 """
 foldername = '/lustre/awikner1/Reservoir-GN-RL/cmaes_lorenz_cosine_wtruthout_scaled_forget%f_res%d' % (forget, res_seed)
+# foldername = 'cmaes_lorenz_cosine_wtruthout_scaled_forget%f_res%d' % (forget, res_seed)
 if not os.path.exists(foldername):
     os.makedirs(foldername)
 else:
@@ -90,5 +92,6 @@ else:
         for file in files:
             os.remove(os.path.join(root, file))
 opts.set('verb_filenameprefix',foldername + '/')
+# opts.set('verb_filenameprefix',foldername + '\\')
 
 results = cma.fmin(min_func_base, x0, sigma, options = opts) # Run the algorithm
