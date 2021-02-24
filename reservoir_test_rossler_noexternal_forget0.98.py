@@ -2,7 +2,7 @@
 #Assume will be finished in no more than 18 hours
 #SBATCH -t 24:00:00
 #Launch on 20 cores distributed over as many nodes as needed
-#SBATCH --ntasks=20
+#SBATCH --ntasks=10
 #SBATCH -N 1
 #Assume need 6 GB/core (6144 MB/core)
 #SBATCH --mem-per-cpu=6144
