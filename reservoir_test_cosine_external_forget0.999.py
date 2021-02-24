@@ -59,7 +59,7 @@ res_seed = 1
 base_res = reservoir(4,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius','forget']
 x0 = np.array([5.071980365336762, 5.544142385647819, 2.605518524451397, 5.4])
-forget = 0.999
+forget = -2.*(np.log10(1.-0.999)+1.)
 min_func_base = lambda x: min_func_wtruth(np.append(x, forget), mask=mask, \
         base_data = scaled_data, f_s=f_s, true_external_data = external_data,\
         base_res=base_res, num_tests=num_tests, num_nodes=num_nodes, \

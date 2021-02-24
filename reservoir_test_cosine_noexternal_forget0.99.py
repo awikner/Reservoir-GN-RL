@@ -39,7 +39,7 @@ res_seed = 1
 base_res = reservoir(3,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius', 'forget']
 x0 = np.array([4.636771438402045, 5.6364128276072565, 5.673582356077067, 5.4])
-forget = 0.99
+forget = -2.*(np.log10(1.-0.99)+1.)
 min_func_base = lambda x: vt_min_function_norm(np.ascontiguousarray(lorenz_data_cosine), \
     np.append(x, forget) , mask,base_res.Win, base_res.A, num_nodes, num_tests, \
     sync_length, train_length, pred_length)
