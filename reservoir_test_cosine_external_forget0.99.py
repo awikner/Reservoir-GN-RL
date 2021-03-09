@@ -2,7 +2,7 @@
 #Assume will be finished in no more than 18 hours
 #SBATCH -t 24:00:00
 #Launch on 20 cores distributed over as many nodes as needed
-#SBATCH --ntasks=10
+#SBATCH --ntasks=4
 #SBATCH -N 1
 #Assume need 6 GB/core (6144 MB/core)
 #SBATCH --mem-per-cpu=6144
@@ -57,13 +57,13 @@ pred_length = 500
 res_seed = 1
 base_res = reservoir(4,num_nodes,input_weight = 1, spectral_radius = 1, seed = res_seed) #Generate a reservoir
 mask = ['input_weight', 'regularization', 'leakage', 'spectral_radius','forget']
-x0 = np.array([5.071980365336762, 5.544142385647819, 2.605518524451397, 5.4])
+x0 = np.array([5.081739238107181, 9.065929898744152, 2.0522654002839937, 4.639219030411264])
 forget = -2.*(np.log10(1.-0.99)+1.)
 min_func_base = lambda x: min_func_wtruth(np.append(x, forget), mask=mask, \
         base_data = scaled_data, f_s=f_s, true_external_data = external_data,\
         base_res=base_res, num_tests=num_tests, num_nodes=num_nodes, \
         pred_length=pred_length, train_length=train_length, sync_length = sync_length)
-sigma = 1.25
+sigma = 0.28
 
 opts = cma.CMAOptions()
 opts.set('popsize',10*x0.size) # Set number of samples per generation
